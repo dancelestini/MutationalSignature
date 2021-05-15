@@ -1,4 +1,4 @@
-#' Obtain all mutations codons
+ #' Obtain all mutations codons
 #'
 #' This function will load all the CDS from the mutated genes in the input file. Then recovery the 3' and
 #' 5' nucleotide aside of the mutation site.
@@ -7,8 +7,11 @@
 #' @param num The number of patient you want to analyse. Default will go through all the dataset.
 #' @return DNA_seq = CDS sequence for all the genes used, codon_part = codon around mutation.
 #' @export
-DNA_sequence_cos = function(cosmic,num = length(cosmic$GENE_NAME)){
-
+DNA_sequence_cos = function(cosmic,num = length(cosmic$GENE_NAME),random = FALSE){
+  if (random == TRUE){
+    idx = sort(sample(1:length(cosmic$GENE_NAME),num, replace = F))
+    cosmic = cosmic[idx,]
+  }
   genes_mut_names = sapply(strsplit(cosmic$GENE_NAME[1:num],"[\\_]+"), `[`, 1)
   genes_mut_site1 = sapply(strsplit(cosmic$MUTATION_CDS[1:num],"[\\c.]+"), `[`, 2)
   genes_mut_site = as.numeric(str_extract(genes_mut_site1, "[0-9]+"))
